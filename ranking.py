@@ -2,8 +2,8 @@ import tbapy
 
 tba = tbapy.TBA('frc4924:test:v1.4')
 
-event = tba.event_matches('2017flwp')
-opr = tba.event_stats('2017flwp')['oprs']
+event = tba.event_matches('2017arli')
+opr = tba.event_stats('2017arli')['oprs']
 
 finished = []
 for i in event:
@@ -30,7 +30,27 @@ for i in score:
     score[i]['score'] = sum(score[i]['matches'])/len(score[i]['matches'])
 
 count = 0
-while count < 50:
+#while count < 5000:
+#    for i in score:
+#        score[i]['matches'] = []
+#
+#    for i in finished:
+#        rest = 0
+#        rerror = 0
+#        best = 0
+#        berror = 0
+#        for r in i['alliances']['red']['teams']:
+#            rest += score[r]['score']
+#        rerror = i['score_breakdown']['red']['totalPoints']-rest
+#        for r in i['alliances']['red']['teams']:
+#            score[r]['matches'].append(i['score_breakdown']['red']['totalPoints']*(score[r]['score']/(i['score_breakdown']['red']['totalPoints']+0.000001)))
+#
+#        for b in i['alliances']['blue']['teams']:
+#            best += score[b]['score']
+#        berror = i['score_breakdown']['blue']['totalPoints']-best
+#        for b in i['alliances']['blue']['teams']:
+#            score[b]['matches'].append(i['score_breakdown']['blue']['totalPoints']*(score[b]['score']/(i['score_breakdown']['blue']['totalPoints']+0.000001)))
+while count < 5:
     for i in score:
         score[i]['matches'] = []
 
@@ -43,20 +63,19 @@ while count < 50:
             rest += score[r]['score']
         rerror = i['score_breakdown']['red']['totalPoints']-rest
         for r in i['alliances']['red']['teams']:
-            score[r]['matches'].append(score[r]['score']+(rerror*(score[r]['score']/(20*i['score_breakdown']['red']['totalPoints']+0.000001))))
+            score[r]['matches'].append(score[r]['score']+(rerror*(score[r]['score']/(20*i['score_breakdown']['red']['totalPoints']+0.1))))
 
         for b in i['alliances']['blue']['teams']:
             best += score[b]['score']
         berror = i['score_breakdown']['blue']['totalPoints']-best
         for b in i['alliances']['blue']['teams']:
             score[b]['matches'].append(score[b]['score']+(berror*(score[b]['score']/(20*i['score_breakdown']['blue']['totalPoints']+0.1))))
-
-
+#
     for i in score:
         score[i]['score'] = sum(score[i]['matches'])/len(score[i]['matches'])
 
     count += 1
-    #print(score['frc5243']['score'])
+    #print(score['frc141']['score'])
 
 #print(score)
 #while True:
@@ -72,7 +91,10 @@ while count < 50:
 #        print("red wins")
 #    else:
 #        print("blue wins")
-
+#for i in score:
+#    score[i]['matches'] = []
+#    score[i]['score'] = 60
+#print(score)
 for i in finished:
     rest = 0
     rerror = 0
@@ -97,27 +119,31 @@ winnings = 0
 rights = []
 wrongs = []
 for i in finished:
-    redscore = score[i['alliances']['red']['teams'][0]]['score']+score[i['alliances']['red']['teams'][1]]['score']+score[i['alliances']['red']['teams'][2]]['score']
-    bluescore = score[i['alliances']['blue']['teams'][0]]['score']+score[i['alliances']['blue']['teams'][1]]['score']+score[i['alliances']['blue']['teams'][2]]['score']
-    #redscore = opr[i['alliances']['red']['teams'][0][3:]]+opr[i['alliances']['red']['teams'][1][3:]]+opr[i['alliances']['red']['teams'][2][3:]]
-    #bluescore = opr[i['alliances']['blue']['teams'][0][3:]]+opr[i['alliances']['blue']['teams'][1][3:]]+opr[i['alliances']['blue']['teams'][2][3:]]
+    #redscore = score[i['alliances']['red']['teams'][0]]['score']+score[i['alliances']['red']['teams'][1]]['score']+score[i['alliances']['red']['teams'][2]]['score']
+    #bluescore = score[i['alliances']['blue']['teams'][0]]['score']+score[i['alliances']['blue']['teams'][1]]['score']+score[i['alliances']['blue']['teams'][2]]['score']
+    redscore = opr[i['alliances']['red']['teams'][0][3:]]+opr[i['alliances']['red']['teams'][1][3:]]+opr[i['alliances']['red']['teams'][2][3:]]
+    bluescore = opr[i['alliances']['blue']['teams'][0][3:]]+opr[i['alliances']['blue']['teams'][1][3:]]+opr[i['alliances']['blue']['teams'][2][3:]]
     bigerror = score[i['alliances']['red']['teams'][0]]['errorsum']+score[i['alliances']['red']['teams'][1]]['errorsum']+score[i['alliances']['red']['teams'][2]]['errorsum']+score[i['alliances']['blue']['teams'][0]]['errorsum']+score[i['alliances']['blue']['teams'][1]]['errorsum']+score[i['alliances']['blue']['teams'][2]]['errorsum']
     rguess = bluescore < redscore
     uguess = i['score_breakdown']['blue']['totalPoints'] < i['score_breakdown']['red']['totalPoints']
+    print(bluescore)
+    print(redscore)
     if rguess == uguess:
-        #print('right!')
+        print('right!')
+        print(i['match_number'])
         #print(bigerror)
         rights.append(bigerror)
         winnings += 1
     else:
-        #print('wrong!')
-        print(bigerror)
+        print('wrong!')
+        print(i['match_number'])
+        #print(bigerror)
         wrongs.append(bigerror)
     if bluescore < redscore:
-        #print("red wins")
+        print("red wins")
         pass
     else:
-        #print("blue wins")
+        print("blue wins")
         pass
     if i['score_breakdown']['blue']['totalPoints'] < i['score_breakdown']['red']['totalPoints']:
         #print("red wins")
@@ -129,11 +155,11 @@ for i in finished:
     #print(i['score_breakdown']['blue']['totalPoints'])
     #print(redscore)
     #print(i['score_breakdown']['red']['totalPoints'])
-rightsum = sum(rights)/len(rights)
-leftsum = sum(wrongs)/len(wrongs)
-print('right')
-print(rightsum)
-print('wrong')
-print(leftsum)
+#rightsum = sum(rights)/len(rights)
+#leftsum = sum(wrongs)/len(wrongs)
+#print('right')
+#print(rightsum)
+#print('wrong')
+#print(leftsum)
 
 print(winnings/len(finished))

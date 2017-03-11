@@ -16,7 +16,7 @@ for i in finished:
     rotorpoints += i['score_breakdown']['blue']['teleopRotorPoints']
     rotorpoints += i['score_breakdown']['red']['teleopRotorPoints']
 
-print(finished)
+#print(finished)
 
 print("average points for rotors: ")
 print(rotorpoints/(2*len(finished)))

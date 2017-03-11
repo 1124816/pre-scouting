@@ -2,8 +2,8 @@ import tbapy
 
 tba = tbapy.TBA('frc4924:test:v1.4')
 
-event = tba.event_matches('2017flwp')
-opr = tba.event_stats('2017flwp')['oprs']
+event = tba.event_matches('2017arli')
+opr = tba.event_stats('2017arli')['oprs']
 
 finished = []
 for i in event:
@@ -30,7 +30,7 @@ for i in score:
     score[i]['score'] = sum(score[i]['matches'])/len(score[i]['matches'])
 
 count = 0
-while count < 50:
+while count < 2:
     for i in score:
         score[i]['matches'] = []
 
@@ -43,7 +43,7 @@ while count < 50:
             rest += score[r]['score']
         rerror = i['score_breakdown']['red']['totalPoints']-rest
         for r in i['alliances']['red']['teams']:
-            score[r]['matches'].append(score[r]['score']+(rerror*(score[r]['score']/(20*i['score_breakdown']['red']['totalPoints']+0.000001))))
+            score[r]['matches'].append(score[r]['score']+(rerror*(score[r]['score']/(20*i['score_breakdown']['red']['totalPoints']+0.1))))
 
         for b in i['alliances']['blue']['teams']:
             best += score[b]['score']
@@ -57,7 +57,6 @@ while count < 50:
 
     count += 1
 
-#print(score)
 
 for i in finished:
     rest = 0
@@ -81,7 +80,7 @@ for i in score:
 
 while True:
     matcha = input("lolz")
-    match = tba.match('2017flwp_qm'+matcha)
+    match = tba.match('2017arli_qm'+matcha)
     print('red')
     redscore = score[match['alliances']['red']['teams'][0]]['score']+score[match['alliances']['red']['teams'][1]]['score']+score[match['alliances']['red']['teams'][2]]['score']
     print(redscore)
