@@ -5,7 +5,6 @@ tba = tbapy.TBA('frc4924:test:v1.5')
 
 event = tba.event_matches('2017alhu')
 teams = tba.event_teams('2017alhu')
-opr = tba.event_stats('2017alhu')['oprs']
 
 rotorspermatch = []
 teamstotal = []
