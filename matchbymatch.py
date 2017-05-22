@@ -42,7 +42,7 @@ while num < len(event):
             score[i]['score'] = 60
 
     count = 0
-    while count < 500:
+    while count < 5:
         for i in score:
             score[i]['matches'] = []
 
@@ -55,13 +55,14 @@ while num < len(event):
                 rest += score[r]['score']
             rerror = i['score_breakdown']['red']['totalPoints']-rest
             for r in i['alliances']['red']['teams']:
-                score[r]['matches'].append(score[r]['score']+(rerror*(score[r]['score']/(20*i['score_breakdown']['red']['totalPoints']+0.000001))))
-
+                #score[r]['matches'].append(score[r]['score']+(rerror*(score[r]['score']/(50*i['score_breakdown']['red']['totalPoints']+0.0000001))))
+                score[r]['matches'].append(score[r]['score']+(rerror/6))
             for b in i['alliances']['blue']['teams']:
                 best += score[b]['score']
             berror = i['score_breakdown']['blue']['totalPoints']-best
             for b in i['alliances']['blue']['teams']:
-                score[b]['matches'].append(score[b]['score']+(berror*(score[b]['score']/(20*i['score_breakdown']['blue']['totalPoints']+0.000001))))
+                #score[b]['matches'].append(score[b]['score']+(berror*(score[b]['score']/(50*i['score_breakdown']['blue']['totalPoints']+0.0000001))))
+                score[b]['matches'].append(score[b]['score']+(berror/6))
         for i in score:
             if len(score[i]['matches']) > 0:
                 score[i]['score'] = sum(score[i]['matches'])/len(score[i]['matches'])

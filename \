@@ -19,8 +19,6 @@ def score(num):
     for i in event:
         if i['match_number'] < num:
             finished.append(i)
-     
-    #print(len(finished))
 
     rotorspermatch = []
     teamstotal = []
@@ -32,8 +30,8 @@ def score(num):
                 if r['key'] == p:
                     teamspermatch.append(1)
                     break
-            else:
-                teamspermatch.append(0)
+                else:
+                    teamspermatch.append(0)
         teamstotal.append(teamspermatch)
         score = 0
         score = i['score_breakdown']['red']['totalPoints']
@@ -46,8 +44,8 @@ def score(num):
                 if b['key'] == p:
                     teamspermatch.append(1)
                     break
-            else:
-                teamspermatch.append(0)
+                else:
+                    teamspermatch.append(0)
         teamstotal.append(teamspermatch)
         teamspermatch = []
         score = 0

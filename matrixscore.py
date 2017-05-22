@@ -3,8 +3,8 @@ import numpy as np
 
 tba = tbapy.TBA('frc4924:test:v1.5')
 
-event = tba.event_matches('2017alhu')
-teams = tba.event_teams('2017alhu')
+event = tba.event_matches('2017flwp')
+teams = tba.event_teams('2017flwp')
 
 rotorspermatch = []
 teamstotal = []
@@ -85,4 +85,4 @@ for i in finished:
         print("wrong!")
     num += 1
     print(num)
-print(winnings/len(event))
+print(winnings/len(finished))
