@@ -64,16 +64,25 @@ def genBase(event_code, tba):
         team_events.append(events)
 
     yearly_events = []
+    last_yearly_events = []
     opr_events = []
+    last_opr_events = []
     for i in range(len(team_events)):
         events = []
+        last_events = []
         oprs = []
+        last_oprs = []
         for p in team_events[i]:
             if p['year'] == 2017 and (p['event_type'] == 0 or p['event_type'] == 1) and p['week']<3:
                 oprs.append(tba.event_oprs("2017"+p['event_code']).oprs[data.index[i]])
                 events.append(p)
+            if p['year'] == 2016 and (p['event_type'] == 0 or p['event_type'] == 1):
+                last_events.append(p)
+                last_oprs.append(tba.event_oprs("2016"+p['event_code']).oprs[data.index[i]])
         yearly_events.append(events)
+        last_yearly_events.append(last_events)
         opr_events.append(oprs)
+        last_opr_events.append(last_oprs)
     team_events = yearly_events
 
     count = []
@@ -81,6 +90,20 @@ def genBase(event_code, tba):
         count.append(len(i))
 
     data['num_comps'] = count
+
+    count = []
+    for i in last_yearly_events:
+        count.append(len(i))
+
+    data['last_num_comps'] = count
+
+    count = []
+    for i in last_opr_events:
+        if len(i)>0:
+            count.append(sum(i)/len(i))
+        else:
+            count.append(0)
+    data['last_opr_comps'] = count
 
     count = []
     for i in opr_events:
@@ -224,11 +247,12 @@ def genBase(event_code, tba):
     #end_array
     data = data.join(end_array)
 
-    #num prev comps
-    #score at prev comps
-    #rope, auto and opr at prev comps
-    #num prev comps prev year
-    #finals prev year
+    data['mean_prev_opr'] = data['opr_comps'].mean()
+
+    #rope, auto and opr at prev comps~
+    #num prev comps prev year*
+    #finals prev year*
+    #opr_comps prev year*
 
     data.to_pickle(event_code + "pandas" + ".p")
     return data
