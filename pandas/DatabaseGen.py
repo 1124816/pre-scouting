@@ -8,7 +8,6 @@ import tbapy
 def genBase(event_code, tba):
 
     teams = tba.event_teams(event_code)
-    #teams = tba.event_teams(event_code)
     i = 0
     while i < len(teams):
         teams[i] = teams[i].json
@@ -248,6 +247,56 @@ def genBase(event_code, tba):
     data = data.join(end_array)
 
     data['mean_prev_opr'] = data['opr_comps'].mean()
+
+    qm = []
+    for i in event:
+        if i['comp_level'] == 'qm':
+             qm.append(i)
+
+    team_avg_opr = {}
+    oppo_avg_opr = {}
+
+    for i in teams:
+        team_avg_opr[i['key']] = []
+        oppo_avg_opr[i['key']] = []
+
+    for i in qm:
+        rteam_opr = {}
+        bteam_opr = {}
+        for p in i['alliances']['red']['team_keys']:
+            rteam_opr[p] = data['oprs'][p]
+
+        for p in i['alliances']['blue']['team_keys']:
+            bteam_opr[p] = data['oprs'][p]
+
+        for p in rteam_opr.keys():
+            for r in rteam_opr.keys():
+                if r != p:
+                    team_avg_opr[p].append(rteam_opr[r])
+
+            for b in bteam_opr.keys():
+                oppo_avg_opr[p].append(bteam_opr[b])
+
+        for p in bteam_opr.keys():
+            for b in bteam_opr.keys():
+                if b != p:
+                    team_avg_opr[p].append(bteam_opr[b])
+
+            for r in rteam_opr.keys():
+                oppo_avg_opr[p].append(rteam_opr[r])
+
+    for i in team_avg_opr:
+        team_avg_opr[i] = sum(team_avg_opr[i])/len(team_avg_opr[i])
+    for i in oppo_avg_opr:
+        oppo_avg_opr[i] = sum(oppo_avg_opr[i])/len(oppo_avg_opr[i])
+
+    #print(team_avg_opr)
+
+    team_avg_opr = pd.Series(team_avg_opr, name='team_avg_opr')
+    oppo_avg_opr = pd.Series(oppo_avg_opr, name='oppo_avg_opr')
+
+    data = data.join(team_avg_opr)
+    data = data.join(oppo_avg_opr)
 
     #rope, auto and opr at prev comps~
     #num prev comps prev year*
