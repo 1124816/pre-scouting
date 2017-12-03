@@ -1,7 +1,8 @@
 import tbapy
 import numpy as np
+import os
 
-tba = tbapy.TBA('frc4924:test:v1.5')
+tba = tbapy.TBA(os.environ['TBAKEY'])
 
 event = tba.event_matches('2017alhu')
 teams = tba.event_teams('2017alhu')
@@ -19,7 +20,7 @@ for i in event:
 
 for i in finished:
     for r in teams:
-        for p in i['alliances']['red']['teams']:
+        for p in i['alliances']['red']['team_keys']:
             if r['key'] == p:
                 teamspermatch.append(1)
                 break
@@ -28,15 +29,13 @@ for i in finished:
 
     teamstotal.append(teamspermatch)
     score = 0
-    if i['score_breakdown']['red']['rotor2Engaged'] : score += 3
-    if i['score_breakdown']['red']['rotor3Engaged'] : score += 4
-    if i['score_breakdown']['red']['rotor4Engaged'] : score += 7
+    score = i['score_breakdown']['red']['teleopRotorPoints']
 
     rotorspermatch.append([score])
     teamspermatch = []
 
     for b in teams:
-        for p in i['alliances']['blue']['teams']:
+        for p in i['alliances']['blue']['team_keys']:
             if b['key'] == p:
                 teamspermatch.append(1)
                 break
@@ -46,9 +45,7 @@ for i in finished:
     teamspermatch = []
 
     score = 0
-    if i['score_breakdown']['blue']['rotor2Engaged'] : score += 3
-    if i['score_breakdown']['blue']['rotor3Engaged'] : score += 4
-    if i['score_breakdown']['blue']['rotor4Engaged'] : score += 7
+    score = i['score_breakdown']['blue']['teleopRotorPoints']
 
     rotorspermatch.append([score])
 

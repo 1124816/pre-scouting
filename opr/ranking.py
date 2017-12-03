@@ -3,8 +3,8 @@ import os
 
 tba = tbapy.TBA(os.environ['TBAKEY'])
 
-event = tba.event_matches('2017alhu')
-opr = tba.event_oprs('2017alhu').json['oprs']
+event = tba.event_matches('2017code')
+opr = tba.event_oprs('2017code').json['oprs']
 
 finished = []
 for i in event:
